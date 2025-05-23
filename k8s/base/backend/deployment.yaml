@@ -16,7 +16,7 @@ spec:
         - name: backend-test
           image: stormmind/backend-test:latest # → Wird durch Tekton gesetzt
           ports:
-            - containerPort: 3000
+            - containerPort: 8080
           env:
             - name: open_meteo_api_key
               value: "DEIN_KEY_HIER"
@@ -29,6 +29,6 @@ spec:
   selector:
     app: backend
   ports:
-    - port: 3000
-      targetPort: 3000
+    - port: 8080
+      targetPort: 8080
   clusterIP: None # → Für Headless-Service bei direkter Verbindung, optional
