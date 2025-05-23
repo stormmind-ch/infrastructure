@@ -4,6 +4,7 @@ resources:
   - ../../base/frontend
   - ../../base/backend
   - ../../base/nginx
+   - ../../base/istio/gateway.yaml
 
 images:
   - name: stormmind/frontend-test
