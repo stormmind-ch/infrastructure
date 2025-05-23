@@ -6,9 +6,9 @@ resources:
   - ../../base/nginx
 
 images:
-  - name: stormmind/frontend_test
+  - name: stormmind/frontend-test
     newTag: latest
-  - name: stormmind/backend_test
+  - name: stormmind/backend-test
     newTag: latest
-  - name: stormmind/proxy_test
+  - name: stormmind/proxy-test
     newTag: latest

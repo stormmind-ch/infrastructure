@@ -13,8 +13,8 @@ spec:
         app: frontend
     spec:
       containers:
-        - name: frontend_test
-          image: stormmind/frontend_test:latest # → Wird durch Tekton gesetzt
+        - name: frontend-test
+          image: stormmind/frontend-test:latest # → Wird durch Tekton gesetzt
           env:
             - name: BACKEND_URL
               value: "http://backend:3000" # → Service-Name im Cluster

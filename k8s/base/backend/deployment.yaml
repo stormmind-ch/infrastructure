@@ -13,8 +13,8 @@ spec:
         app: backend
     spec:
       containers:
-        - name: backend_test
-          image: stormmind/backend_test:latest # → Wird durch Tekton gesetzt
+        - name: backend-test
+          image: stormmind/backend-test:latest # → Wird durch Tekton gesetzt
           ports:
             - containerPort: 3000
 ---
