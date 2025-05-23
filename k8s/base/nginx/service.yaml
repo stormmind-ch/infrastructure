@@ -12,4 +12,4 @@ spec:
     - name: https
       port: 443
       targetPort: 443
-  type: LoadBalancer # ⬅️ oder NodePort, je nach Cluster-Setup
+  type: NodePort # ⬅️ oder NodePort, je nach Cluster-Setup

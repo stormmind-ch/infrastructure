@@ -17,6 +17,9 @@ spec:
           image: stormmind/backend-test:latest # → Wird durch Tekton gesetzt
           ports:
             - containerPort: 3000
+          env:
+            - name: open_meteo_api_key
+              value: "DEIN_KEY_HIER"
 ---
 apiVersion: v1
 kind: Service
