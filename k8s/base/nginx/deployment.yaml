@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: stormmind/proxy_test:latest  # Tekton ersetzt Tag
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+          volumeMounts:
+            - name: certs
+              mountPath: /etc/letsencrypt/live/stormmind.ch
+              readOnly: true
+            - name: options
+              mountPath: /etc/letsencrypt
+              readOnly: true
+      volumes:
+        - name: certs
+          hostPath:
+            path: /etc/letsencrypt/live/stormmind.ch
+            type: DirectoryOrCreate
+        - name: options
+          hostPath:
+            path: /etc/letsencrypt
+            type: DirectoryOrCreate

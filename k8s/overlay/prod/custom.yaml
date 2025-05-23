@@ -1,0 +1,14 @@
+namespace: prod
+
+resources:
+  - ../../base/frontend
+  - ../../base/backend
+  - ../../base/nginx
+
+images:
+  - name: stormmind/frontend_test
+    newTag: latest
+  - name: stormmind/backend_test
+    newTag: latest
+  - name: stormmind/proxy_test
+    newTag: latest
