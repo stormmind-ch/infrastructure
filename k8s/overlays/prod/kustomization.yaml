@@ -4,7 +4,7 @@ resources:
   - ../../base/frontend
   - ../../base/backend
   - ../../base/nginx
-  - ../../base/istio
+  - ../../base/traeffic
 
 images:
   - name: stormmind/frontend-test
