@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: stormmind-ch-tls
+  namespace: default
+spec:
+  secretName: stormmind-ch-tls
+  dnsNames:
+  - stormmind.ch
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer

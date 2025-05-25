@@ -10,6 +10,6 @@ docker build -t frontend-test ~/new_frontend/frontend/stormmind/
 docker tag frontend-test stormmind/frontend-test
 docker push stormmind/frontend-test
 
-docker build -t backend-test ~/new_backend/backend/
-docker tag backend-test stormmind/backend-test
+docker build -t backend-test ~/new_backend/backend/;
+docker tag backend-test stormmind/backend-test;
 docker push stormmind/backend-test
