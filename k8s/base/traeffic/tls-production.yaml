@@ -12,5 +12,4 @@ spec:
     solvers:
       - http01:
           ingress:
-            serviceType: ClusterIP
-            ingressClassName: traefik
+            class: istio
