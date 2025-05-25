@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: stormmind/proxy-test:latest  # Tekton ersetzt Tag
+          image: stormmind/proxy-test:latest 
           ports:
             - containerPort: 80
             - containerPort: 443

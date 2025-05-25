@@ -3,7 +3,7 @@ namespace: prod
 resources:
   - ../../base/frontend
   - ../../base/backend
-  - ../../base/nginx
+ # - ../../base/nginx
   - ../../base/traeffic
 
 images:
@@ -11,5 +11,5 @@ images:
     newTag: latest
   - name: stormmind/backend-test
     newTag: latest
-  - name: stormmind/proxy-test
-    newTag: latest
+#  - name: stormmind/proxy-test
+#    newTag: latest
