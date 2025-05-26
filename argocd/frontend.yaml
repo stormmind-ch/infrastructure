@@ -12,7 +12,7 @@ spec:
   source:
     repoURL: https://github.com/stormmind-ch/infrastructure.git  # Can point to either a Helm chart repo or a git repo.
     targetRevision: main #HEAD
-    path: deployment-repo/frontend
+    path: deployment/frontend
 
   # Destination cluster and namespace to deploy the application
   destination:
