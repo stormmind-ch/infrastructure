@@ -10,14 +10,14 @@ spec:
 
   # Source of the application manifests
   source:
-    repoURL: https://github.zhaw.ch/ueltsdam/CCP2-DVOP2-Lab.git  # Can point to either a Helm chart repo or a git repo.
-    targetRevision: CCPlab #HEAD
-    path: deployment-repo/sample/prod
+    repoURL: https://github.com/stormmind-ch/infrastructure.git  # Can point to either a Helm chart repo or a git repo.
+    targetRevision: main #HEAD
+    path: frontend
 
   # Destination cluster and namespace to deploy the application
   destination:
     server: https://kubernetes.default.svc
-    namespace: sample-prod
+    namespace: default
 
   # Sync policy
   syncPolicy:

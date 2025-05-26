@@ -1,0 +1,91 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: deploy
+spec:
+  params:
+  - name: environment
+    description: Environment to deploy to (testing, staging, prod, ...)
+    type: string
+  - name: argo-app-name
+    description: ArgoCD application configuration name
+    type: string
+  - name: configGitUrl
+    description: Repository URL of the config repository
+    type: string
+  - name: configSubDir
+    description: The subdirectory for the application in the config repository
+    default: ""
+  - name: appImage
+    description: Application image name on registry
+    type: string
+  - name: buildRevision
+    description: Revision of the new build
+    type: string
+  - name: gatewayHost
+    description: Host address of the application gateway
+    type: string
+  workspaces:
+  - name: config-source
+  stepTemplate:
+    envFrom:
+    - secretRef:
+        name: argocd-env-secret
+    env:
+    - name: ARGOCD_SERVER
+      value: argocd-server.argocd
+
+  steps:
+  - name: git-checkout
+    image: alpine/git:v2.26.2
+    workingDir: "$(workspaces.config-source.path)"
+    script: |
+      #!/usr/bin/env sh
+      set -e
+
+      git init
+      git remote add origin $(params.configGitUrl)
+      git fetch --depth 1 origin $(params.buildRevision)
+      git checkout $(params.buildRevision)
+
+  - name: update-yaml
+    image: mikefarah/yq:4.25.1
+    securityContext:
+      privileged: true
+      runAsUser: 0
+    workingDir: "$(workspaces.config-source.path)/$(params.configSubDir)/$(params.environment)"
+    script: |
+      #!/usr/bin/env sh
+      set -e
+
+      echo "updating $(params.environment) image to $(params.appImage):$(params.buildRevision)"
+      /usr/bin/yq e '.spec.template.spec.containers[0].image = "$(params.appImage):$(params.buildRevision)"' -i deployment.yaml
+
+      echo "updating all pods in $(params.environment) to revision $(params.buildRevision)"
+      /usr/bin/yq e '.spec.template.metadata.annotations.revision = "$(params.buildRevision)"' -i deployment.yaml
+
+      echo "updating ingress in $(params.environment) to gateway $(params.gatewayHost)"
+      /usr/bin/yq e '.spec.rules[0].host = "$(params.gatewayHost)"' -i ingress.yaml
+
+  - name: commit-push-changes-gitops
+    image: alpine/git:v2.26.2
+    workingDir: "$(workspaces.config-source.path)/$(params.configSubDir)/$(params.environment)"
+    script: |
+      #!/usr/bin/env sh
+      set -e
+
+      git config --global user.email "tekton@tekton.dev"
+      git config --global user.name "Tekton Pipeline"
+      git add .
+      git commit --allow-empty -m "[tekton] updating $(params.environment) image to $(params.buildRevision)"
+      git push origin $(params.buildRevision)
+
+  - name: wait-for-argocd-rollout
+    image: quay.io/argoproj/argocd:v2.7.1
+    script: |
+      #!/usr/bin/env sh
+      set -e -x
+      env | grep ARGOCD
+      argocd app sync $(params.argo-app-name) --insecure
+      argocd app wait $(params.argo-app-name) --sync --health --operation --insecure
+---

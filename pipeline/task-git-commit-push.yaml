@@ -1,0 +1,62 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: git-commit-push
+spec:
+  description: >-
+    This Tasks commits and pushes changes of a repostory in the given source directory.
+    It is assumed that a defaut remote tracking-branch is configured by the checkout.
+  workspaces:
+  - name: source
+    description: The backing volume containing the git repo to be pushed.
+ 
+  params:
+  - name: gitUserName
+    type: string
+    description: Git user name for performing git operation.
+    default: ""
+  - name: gitUserEmail
+    type: string
+    description: Git user email for performing git operation.
+    default: ""
+  - name: subdirectory
+    description: Subdirectory inside the `source` Workspace to push the repo from.
+    type: string
+    default: ""
+  - name: message
+    description: Commit message used
+    type: string
+    default: "New commit"
+  - name: commitParams
+    type: string
+    default: ""
+  - name: pushParams
+    type: string
+    default: ""
+  results:
+  - name: commit
+    description: The precise commit SHA after the git operation.
+  
+  steps:
+  - name: git-commit-push
+    image: alpine/git:v2.26.2
+    workingDir: "$(workspaces.output.path)/$(params.subdirectory)"
+    script: |
+      #!/usr/bin/env sh
+      set -e
+
+      # Setting up the config for git.
+      git config --global user.email "$(params.gitUserEmail)"
+      git config --global user.name "$(params.gitUserName)"
+      
+      git add .
+      git commit --allow-empty -m "$(params.message)" $(params.commitParams)
+      git push $(params.pushParams)
+
+      # publish result values
+      RESULT_SHA="$(git rev-parse HEAD)"
+      EXIT_CODE="$?"
+      if [ "${EXIT_CODE}" != 0 ] ; then
+          exit "${EXIT_CODE}"
+      fi
+      printf "%s" "${RESULT_SHA}" > "$(results.commit.path)"
