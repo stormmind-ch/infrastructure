@@ -8,7 +8,7 @@ spec:
   serviceAccountName: pipeline
   params:
     - name: buildRevision
-      value: 'main'
+      value: 'latest'
     - name: appGitUrl
       value: 'https://github.com/stormmind-ch/frontend.git'
     - name: appSubDir
