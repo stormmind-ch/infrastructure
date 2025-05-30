@@ -50,6 +50,6 @@ spec:
         - name: IMAGE
           value: $(params.registryPublic)/$(params.imageName):latest
         - name: DOCKERFILE
-          value: $(params.appSubDir)/Dockerfile
+          value: $(params.DOCKERFILE)
         - name: CONTEXT
-          value: $(params.appSubDir)
+          value: $(params.CONTEXT)
