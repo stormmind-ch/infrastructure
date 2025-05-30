@@ -25,7 +25,7 @@ spec:
     - name: imageName
       value: 'stormmind/backend_test'
   workspaces:
-    - name: backend-source
+    - name: app-source
       volumeClaimTemplate:
         spec:
           storageClassName: default
