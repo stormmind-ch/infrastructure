@@ -63,13 +63,19 @@ spec:
       #!/bin/sh
       echo "Waiting for Docker Daemon to become ready..."
       for i in $(seq 1 20); do
-        if docker info > /dev/null 2>&1; then
+        if docker --host=tcp://localhost:2376 info > /dev/null 2>&1; then
           echo "✅ Docker Daemon is up"
           break
         fi
         echo "⏳ Docker not ready yet... retrying in 1s"
         sleep 1
       done
+
+      if ! docker --host=tcp://localhost:2376 info > /dev/null 2>&1; then
+        echo "❌ Docker Daemon failed to start after 20s."
+        exit 1
+      fi
+      
       docker build \
         $(params.build_extra_args) \
         --no-cache \
