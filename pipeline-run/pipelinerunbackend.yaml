@@ -12,7 +12,7 @@ spec:
     - name: appGitUrl
       value: 'https://github.com/stormmind-ch/backend.git'
     - name: appSubDir
-      value: 'src'
+      value: ''
     - name: configGitUrl
       value: 'https://github.com/stormmind-ch/infrastructure.git'
     - name: configSubDir
