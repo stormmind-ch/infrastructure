@@ -9,11 +9,11 @@ spec:
     serviceAccountName: pipeline
   params:
     - name: buildRevision
-      value: 'main'
+      value: 'latest'
     - name: appGitUrl
       value: 'https://github.com/stormmind-ch/frontend.git'
     - name: appSubDir
-      value: 'stormmind/src'
+      value: 'stormmind'
     - name: configGitUrl
       value: 'https://github.com/stormmind-ch/infrastructure.git'
     - name: configSubDir
