@@ -4,7 +4,7 @@ metadata:
   name: frontend
   namespace: default
 spec:
-  replicas: 12
+  replicas: 1
   revisionHistoryLimit: 1
   selector:
     matchLabels:
