@@ -18,7 +18,7 @@ spec:
     - name: configSubDir
       value: ''
     - name: registryPublic
-      value: 'docker.io/stormmind'
+      value: 'stormmind'
     - name: gatewayHost
       value: 'stormmind.ch'
     - name: imageName
