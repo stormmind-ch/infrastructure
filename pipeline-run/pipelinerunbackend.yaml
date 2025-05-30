@@ -1,12 +1,11 @@
-apiVersion: tekton.dev/v1
+apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
   generateName: stormmind-build-deploy-backend-
 spec:
   pipelineRef:
     name: build-deploy
-  taskRunTemplate:
-    serviceAccountName: pipeline
+  serviceAccountName: pipeline
   params:
     - name: buildRevision
       value: 'main'
