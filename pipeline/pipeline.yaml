@@ -12,6 +12,9 @@ spec:
     - name: registryPublic
     - name: gatewayHost
     - name: imageName
+    - name: imageTag
+      description: The tag to use for the built image
+      default: latest
   workspaces:
     - name: app-source
     - name: config-source
