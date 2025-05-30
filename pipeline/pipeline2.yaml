@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: build-deploy
+  name: build-deploy2
 spec:
   params:
   - name: buildRevision
