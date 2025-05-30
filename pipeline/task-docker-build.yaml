@@ -51,7 +51,7 @@ spec:
     env:
     # Connect to the sidecar over TCP, with TLS.
     - name: DOCKER_HOST
-      value: tcp://localhost:2376
+      value: tcp://server:2376
     # Verify TLS.
     - name: DOCKER_TLS_VERIFY
       value: '1'
