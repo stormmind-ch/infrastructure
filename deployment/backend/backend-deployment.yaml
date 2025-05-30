@@ -21,7 +21,7 @@ spec:
         ports:
         - containerPort: 8080
         env:
-        - name: open_meteo_api_key
+        - name: API_KEY
           value: ###API KEY###
         resources:
           requests:
