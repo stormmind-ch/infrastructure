@@ -18,6 +18,7 @@ spec:
   workspaces:
     - name: app-source
     - name: config-source
+    - name: docker-credentials
   tasks:
     - name: fetch-source
       taskRef:
@@ -40,6 +41,8 @@ spec:
       workspaces:
         - name: source
           workspace: app-source
+        - name: dockerconfig
+          workspace: docker-credentials
       params:
         - name: IMAGE
           value: $(params.registryPublic)/$(params.imageName):latest
