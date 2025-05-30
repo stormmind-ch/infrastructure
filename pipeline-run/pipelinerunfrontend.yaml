@@ -28,7 +28,7 @@ spec:
     - name: app-source
       volumeClaimTemplate:
         spec:
-          storageClassName: default
+          storageClassName: local-path
           accessModes:
             - ReadWriteOnce
           resources:
