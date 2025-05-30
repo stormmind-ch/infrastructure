@@ -62,8 +62,12 @@ spec:
     script: |
       #!/bin/sh
       echo "Waiting for Docker Daemon to become ready..."
-      while [ ! -f /certs/client/ca.pem ]; do
-        echo "Waiting for /certs/client/ca.pem..."
+      for i in $(seq 1 20); do
+        if docker info > /dev/null 2>&1; then
+          echo "✅ Docker Daemon is up"
+          break
+        fi
+        echo "⏳ Docker not ready yet... retrying in 1s"
         sleep 1
       done
       docker build \
