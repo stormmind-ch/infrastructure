@@ -42,10 +42,10 @@ spec:
   # used during the sync process.
   ignoreDifferences:
   # for the specified json pointers
-  - group: apps
-    kind: Deployment
-    jsonPointers:
-    - /spec/replicas
+  #- group: apps
+  #  kind: Deployment
+  #  jsonPointers:
+  #  - /spec/replicas
   # for the specified managedFields managers
   - group: "*"
     kind: "*"
