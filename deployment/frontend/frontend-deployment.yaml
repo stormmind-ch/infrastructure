@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: stormmind/frontend-test:stein
+        image: stormmind/frontend-test:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 80
