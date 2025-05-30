@@ -13,6 +13,10 @@ spec:
       value: 'https://github.com/stormmind-ch/backend.git'
     - name: appSubDir
       value: ''
+    - name: DOCKERFILE
+      value: Dockerfile
+    - name: CONTEXT
+      value: .
     - name: configGitUrl
       value: 'https://github.com/stormmind-ch/infrastructure.git'
     - name: configSubDir

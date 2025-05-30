@@ -16,10 +16,8 @@ spec:
       default: latest
     - name: DOCKERFILE
       description: Path to Dockerfile
-      default: $(params.appSubDir)/Dockerfile
     - name: CONTEXT
       description: Path to build context
-      default: $(params.appSubDir)
   workspaces:
     - name: app-source
     - name: config-source
