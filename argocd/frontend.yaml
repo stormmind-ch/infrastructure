@@ -6,7 +6,7 @@ metadata:
   namespace: argocd
   annotations:
     argocd-image-updater.argoproj.io/image-list: stormmind/frontend-test
-    argocd-image-updater.argoproj.io/stormmind/frontend-test.update-strategy: latest
+    argocd-image-updater.argoproj.io/stormmind_frontend-test.update-strategy: latest
 spec:
   # The project the application belongs to.
   project: default
