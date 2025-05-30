@@ -42,7 +42,7 @@ spec:
           workspace: app-source
       params:
         - name: IMAGE
-          value: $(params.registryPublic)/$(params.imageName):$(params.imageTag)
+          value: $(params.registryPublic)/$(params.imageName):latest
         - name: DOCKERFILE
           value: $(params.appSubDir)/Dockerfile
         - name: CONTEXT
