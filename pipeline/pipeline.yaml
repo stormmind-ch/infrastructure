@@ -4,163 +4,43 @@ metadata:
   name: build-deploy
 spec:
   params:
-  - name: buildRevision
-    description: The revision of the build, i.e. the tag or commit revision of the application repository
-  - name: appGitUrl
-    description: The application repository
-  - name: appSubDir
-    description: The subdirectory for the application in the app repository
-    default: ""
-  - name: configGitUrl
-    description: The application config (GitOps) repository
-  - name: configSubDir
-    description: The subdirectory for the application in the config repository
-    default: ""
-  - name: imageName
-    description: The application repository image name
-  - name: registryLocal
-    description: The public registry host
-    default: "stormmind"
-  - name: registryPublic
-    description: The public registry host
-    default: "stormmind"
-  - name: gatewayHost
-    description: Host address of the application gateway
-
+    - name: buildRevision
+    - name: appGitUrl
+    - name: appSubDir
+    - name: configGitUrl
+    - name: configSubDir
+    - name: registryPublic
+    - name: gatewayHost
+    - name: imageName
   workspaces:
-  - name: app-source
-  - name: config-source
-
-  # check out the app source code
+    - name: app-source
+    - name: config-source
   tasks:
-  - name: checkout-source
-    taskRef:
-      name: git-checkout
-    params:
-    - name: url
-      value: $(params.appGitUrl)
-    - name: revision
-      value: $(params.buildRevision)
-    workspaces:
-    - name: output
-      workspace: app-source
-
-# display commit digest of the checked out repo
-  - name: display-results
-    runAfter:
-    - checkout-source
-    params:
-    - name: digest
-      value: $(tasks.checkout-source.results.commit)
-    taskSpec:
+    - name: fetch-source
+      taskRef:
+        name: git-clone
       params:
-      - name: digest
-        description: Digest value to print.
-      steps:
-      - name: print
-        image: docker.io/library/bash:5.1.4@sha256:b208215a4655538be652b2769d82e576bc4d0a2bb132144c060efc5be8c3f5d6
-        script: |
-          #!/usr/bin/env bash
-          set -e
-          echo "Digest of checked out commit: $(params.digest)"
+        - name: url
+          value: $(params.appGitUrl)
+        - name: revision
+          value: $(params.buildRevision)
+        - name: subdirectory
+          value: $(params.appSubDir)
+      workspaces:
+        - name: output
+          workspace: app-source
 
-  # build and push the image using Dockerfile
-  - name: build-push-image
-    taskRef:
-      name: docker-build
-    runAfter:
-    - checkout-source
-    params:
-    - name: image
-      value: "$(params.registryPublic)/$(params.imageName):$(params.buildRevision)"
-    - name: insecure_registry
-      value: $(params.registryPublic)
-    workspaces:
-    - name: source
-      workspace: app-source
-      subPath: $(params.appSubDir)
-
-  # deploy to staging
-  - name: deploy-staging
-    taskRef:
-      name: deploy
-    runAfter:
-    - build-push-image
-    params:
-    - name: environment
-      value: staging
-    - name: argo-app-name
-      value: sample-staging
-    - name: configGitUrl
-      value: $(params.configGitUrl)
-    - name: configSubDir
-      value: $(params.configSubDir)
-    - name: appImage
-      value: "$(params.registryLocal)/$(params.imageName)"
-    - name: buildRevision
-      value: $(params.buildRevision)
-    - name: gatewayHost
-      value: "staging.$(params.gatewayHost)"
-    workspaces:
-    - name: config-source
-      workspace: config-source
-
-  # run a pseudo test: here you would run extensive acceptance test
-  - name: run-systemtest
-    runAfter:
-    - deploy-staging
-    params:
-    - name: gateway
-      value: "staging.$(params.gatewayHost)"
-    taskSpec:
+    - name: build-push
+      runAfter: ["fetch-source"]
+      taskRef:
+        name: kaniko
+      workspaces:
+        - name: source
+          workspace: app-source
       params:
-      - name: gateway
-      steps:
-      - name: ping
-        image: curlimages/curl:7.83.1
-        command: [curl]
-        args: ["-fIsS","--connect-timeout", "3", "http://$(params.gateway)"]
-
-  # deploy to production
-  - name: deploy-prod
-    taskRef:
-      name: deploy
-    runAfter:
-    - run-systemtest
-    params:
-    - name: environment
-      value: prod
-    - name: argo-app-name
-      value: sample-prod
-    - name: configGitUrl
-      value: $(params.configGitUrl)
-    - name: configSubDir
-      value: $(params.configSubDir)
-    - name: appImage
-      value: "$(params.registryLocal)/$(params.imageName)"
-    - name: buildRevision
-      value: $(params.buildRevision)
-    - name: gatewayHost
-      value: "$(params.gatewayHost)"
-    workspaces:
-    - name: config-source
-      workspace: config-source
-
-  # run a pseudo test: here you would run extensive smoke test
-  - name: run-smoke-test
-    runAfter:
-    - deploy-prod
-    params:
-    - name: gateway
-      value: "$(params.gatewayHost)"
-    taskSpec:
-      params:
-      - name: gateway
-      steps:
-      - name: ping
-        image: curlimages/curl:7.83.1
-        command: [curl]
-        args: ["-fIsS","--connect-timeout", "3", "http://$(params.gateway)"]
-
----
-
+        - name: IMAGE
+          value: $(params.registryPublic)/$(params.imageName):$(params.buildRevision)
+        - name: DOCKERFILE
+          value: $(params.appSubDir)/Dockerfile
+        - name: CONTEXT
+          value: $(params.appSubDir)
