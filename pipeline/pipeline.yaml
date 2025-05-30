@@ -13,12 +13,13 @@ spec:
     - name: gatewayHost
     - name: imageName
     - name: imageTag
-    - name: DOCKERFILE
-      value: $(params.appSubDir)/Dockerfile
-    - name: CONTEXT
-      value: .
-      description: The tag to use for the built image
       default: latest
+    - name: DOCKERFILE
+      description: Path to Dockerfile
+      default: $(params.appSubDir)/Dockerfile
+    - name: CONTEXT
+      description: Path to build context
+      default: $(params.appSubDir)
   workspaces:
     - name: app-source
     - name: config-source
