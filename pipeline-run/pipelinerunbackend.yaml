@@ -22,7 +22,9 @@ spec:
     - name: gatewayHost
       value: 'stormmind.ch'
     - name: imageName
-      value: 'backend-test:latest'
+      value: 'backend-test'
+    - name: imageTag
+      value: 'latest'
   workspaces:
     - name: app-source
       volumeClaimTemplate:
