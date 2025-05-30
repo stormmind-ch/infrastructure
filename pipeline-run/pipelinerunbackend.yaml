@@ -1,21 +1,18 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
   generateName: stormmind-build-deploy
 spec:
   pipelineRef:
     name: build-deploy
-  serviceAccountName: pipeline
+  taskRunTemplate:
+    serviceAccountName: pipeline
   params:
     - name: buildRevision
       value: 'main'
-    - name: frontendGitUrl
-      value: 'https://github.com/stormmind-ch/frontend.git'
-    - name: frontendSubDir
-      value: 'stormmind/src'
-    - name: backendGitUrl
+    - name: appGitUrl
       value: 'https://github.com/stormmind-ch/backend.git'
-    - name: backendSubDir
+    - name: appSubDir
       value: 'src/main/java/com/stormmind'
     - name: configGitUrl
       value: 'https://github.com/stormmind-ch/infrastructure.git'
@@ -25,20 +22,9 @@ spec:
       value: 'docker.io/stormmind'
     - name: gatewayHost
       value: 'stormmind.ch'
-    - name: frontendImageName
-      value: 'stormmind/frontend_test'
-    - name: backendImageName
+    - name: imageName
       value: 'stormmind/backend_test'
   workspaces:
-    - name: frontend-source
-      volumeClaimTemplate:
-        spec:
-          storageClassName: default
-          accessModes:
-            - ReadWriteOnce
-          resources:
-            requests:
-              storage: 1.0Gi
     - name: backend-source
       volumeClaimTemplate:
         spec:
