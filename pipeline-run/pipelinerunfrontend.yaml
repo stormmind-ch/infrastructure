@@ -35,6 +35,8 @@ spec:
           resources:
             requests:
               storage: 1.0Gi
+    - name: config-source
+      emptyDir: {} 
     - name: docker-credentials
       secret:
         secretName: docker-credentials
