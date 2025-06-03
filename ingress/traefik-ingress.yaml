@@ -35,7 +35,7 @@ spec:
   entryPoints:
     - websecure 
   routes:
-    - match: Host(`stormmind.ch`) && (PathPrefix(`/`) || PathPrefix(`/Forecast`) || PathPrefix(`/Report`) || PathPrefix(`/AboutUs`))
+    - match: Host(`stormmind.ch`) && (PathPrefix(`/Forecast`) || PathPrefix(`/Report`) || PathPrefix(`/AboutUs`))
       kind: Rule
       services:
         - name: frontend-service
