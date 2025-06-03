@@ -35,16 +35,17 @@ spec:
   entryPoints:
     - websecure 
   routes:
-    - match: Host(`stormmind.ch`) && (PathPrefix(`/`) || PathPrefix(`/Forecast`) || PathPrefix(`/Report`) || PathPrefix(`/AboutUs`))
-      kind: Rule
-      services:
-        - name: frontend-service
-          port: 80
     - match: Host(`stormmind.ch`) && PathPrefix(`/api`)
       kind: Rule
       services:
         - name: backend-service
           port: 80
+    - match: Host(`stormmind.ch`) && (PathPrefix(`/`) || PathPrefix(`/Forecast`) || PathPrefix(`/Report`) || PathPrefix(`/AboutUs`))
+      kind: Rule
+      services:
+        - name: frontend-service
+          port: 80
+
   tls:
     secretName: stormmind-ch-tls
     # certResolver: letsencrypt-prod
