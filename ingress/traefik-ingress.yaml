@@ -1,3 +1,31 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: http-redirect
+  namespace: default
+spec:
+  entryPoints:
+    - web 
+  routes:
+    - match: Host(`stormmind.ch`)
+      kind: Rule
+      services:
+        - name: frontend-service
+          port: 80
+      middlewares:
+        - name: redirect-https
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: redirect-https
+  namespace: default
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
+---
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
@@ -5,9 +33,9 @@ metadata:
   namespace: default
 spec:
   entryPoints:
-    - websecure
+    - websecure 
   routes:
-    - match: Host(`stormmind.ch`)
+    - match: Host(`stormmind.ch`) && (PathPrefix(`/`) || PathPrefix(`/Forecast`) || PathPrefix(`/Report`) || PathPrefix(`/AboutUs`))
       kind: Rule
       services:
         - name: frontend-service
@@ -19,6 +47,6 @@ spec:
           port: 80
   tls:
     secretName: stormmind-ch-tls
-#    certResolver: letsencrypt-prod
-#    domains:
-#      - main: stormmind.ch
+    # certResolver: letsencrypt-prod
+    # domains:
+    #   - main: stormmind.ch
