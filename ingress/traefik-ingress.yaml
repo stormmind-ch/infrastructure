@@ -35,7 +35,7 @@ spec:
   entryPoints:
     - websecure 
   routes:
-    - match: Host(`stormmind.ch`) && PathPrefix(`/api`)
+    - match: Host(`api.stormmind.ch`) && PathPrefix(`/api`)
       kind: Rule
       services:
         - name: backend-service
