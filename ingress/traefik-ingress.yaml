@@ -48,6 +48,8 @@ spec:
 
   tls:
     secretName: stormmind-ch-tls
-    # certResolver: letsencrypt-prod
-    # domains:
-    #   - main: stormmind.ch
+    certResolver: letsencrypt-prod
+    domains:
+      - main: stormmind.ch
+        sans:
+            - api.stormmind.ch
